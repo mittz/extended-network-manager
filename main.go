@@ -1,14 +1,16 @@
 package main
 
 import (
+	"log"
 	"os"
 
+	"github.com/mittz/extended-network-manager/controller"
 	"github.com/urfave/cli"
 )
 
 var (
 	service           string
-	ENMControllerName string
+	enmControllerName string
 	enmc              controller.ENMController
 )
 
@@ -26,9 +28,14 @@ func main() {
 			Aliases: []string{"r"},
 			Usage:   "run rancher extended-network-manager service",
 			Action: func(c *cli.Context) error {
-				ENMControllerName = c.String("controller")
-				enmc = controller.GetController(ENMControllerName)
-				enmc.Run()
+				enmControllerName = c.String("controller")
+				enmc = controller.GetController(enmControllerName)
+
+				if enmc == nil {
+					log.Fatalf("Unable to find controller by name %s", enmControllerName)
+				}
+
+				enmc.Init("hello")
 
 				return nil
 			},
