@@ -13,8 +13,6 @@ func init() {
 		log.Fatalf("%v", err)
 	}
 
-	log.Println("rancher.go init()")
-
 	controller.RegisterController(enmc.GetName(), enmc)
 }
 
@@ -22,8 +20,8 @@ func (*ExntendedNetworkManagerController) Init(message string) {
 	log.Println(message)
 }
 
-func (*ExntendedNetworkManagerController) Run() {
-	log.Println("rancher run")
+func (*ExntendedNetworkManagerController) Run(provider provider.ENMProvider) {
+	provider.
 }
 
 type ExntendedNetworkManagerController struct {

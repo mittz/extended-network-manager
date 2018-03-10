@@ -29,14 +29,20 @@ func main() {
 			Usage:   "run rancher extended-network-manager service",
 			Action: func(c *cli.Context) error {
 				enmControllerName = c.String("controller")
+				enmProviderName = c.String("provider")
 				enmc = controller.GetController(enmControllerName)
 
 				if enmc == nil {
 					log.Fatalf("Unable to find controller by name %s", enmControllerName)
 				}
 
-				enmc.Init("hello")
+				enmp = provider.GetProvider(enmProviderName)
 
+				if enmp == nil {
+					log.Fatal("Unable to find provider by nmae %s", enmProviderName)
+				}
+
+				enmc.Run(enmp)
 				return nil
 			},
 			Flags: []cli.Flag{
@@ -44,6 +50,11 @@ func main() {
 					Name:  "controller",
 					Value: "rancher",
 					Usage: "controller name",
+				},
+				cli.StringFlag{
+					Name:  "provider",
+					Value: "pipework",
+					Usage: "provicer name",
 				},
 			},
 		},
