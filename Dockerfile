@@ -1,5 +1,7 @@
-FROM scratch
+FROM centos
 
-COPY ./rancher-pipework /rancher-pipework
+RUN curl https://releases.rancher.com/install-docker/1.12.sh | sh
 
-CMD ["rancher-pipework"]
+COPY ./extended-network-manager /extended-network-manager
+
+CMD ["/extended-network-manager"]

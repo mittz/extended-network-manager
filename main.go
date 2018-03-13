@@ -5,15 +5,19 @@ import (
 	"os"
 
 	"github.com/mittz/extended-network-manager/controller"
+	"github.com/mittz/extended-network-manager/provider"
 	"github.com/urfave/cli"
 )
 
 var (
 	service           string
 	enmControllerName string
+	enmProviderName   string
 	enmc              controller.ENMController
+	enmp              provider.ENMProvider
 )
 
+// TODO: Adopting to CNI for Rancher(Cattle) / Kubernetes
 func main() {
 	app := cli.NewApp()
 
@@ -30,6 +34,7 @@ func main() {
 			Action: func(c *cli.Context) error {
 				enmControllerName = c.String("controller")
 				enmProviderName = c.String("provider")
+
 				enmc = controller.GetController(enmControllerName)
 
 				if enmc == nil {
@@ -39,7 +44,7 @@ func main() {
 				enmp = provider.GetProvider(enmProviderName)
 
 				if enmp == nil {
-					log.Fatal("Unable to find provider by nmae %s", enmProviderName)
+					log.Fatalf("Unable to find provider by name %s", enmProviderName)
 				}
 
 				enmc.Run(enmp)
