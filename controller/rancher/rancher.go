@@ -114,7 +114,7 @@ func SearchProviderID(hostID string) string {
 	for _, c := range containers {
 		v, contain := c.Labels["io.rancher.stack_service.name"]
 		if contain && v == providerStackServiceName {
-			provider = c.ID
+			provider = c.ExternalID
 		}
 	}
 
@@ -204,7 +204,7 @@ func (*ExntendedNetworkManagerController) Run(provider provider.ENMProvider) {
 						err := provider.ApplyConfig(SearchProviderID(event.Data.Resource.HostID))
 
 						if err != nil {
-							log.Printf("%v\n", err)
+							log.Printf("provider.ApplyConfig(SearchProviderID(event.Data.Resource.HostID)): %v\n", err)
 						}
 
 						provider.AddInterface(cnc)
